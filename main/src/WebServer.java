@@ -12,7 +12,7 @@ public class WebServer {
     public void start() {
 
         ServerSocket s;
-        int portNr = 0;
+        int portNr = 10010;
 
         System.out.println("WebServer is running on port " + portNr);
         System.out.println("(press ctrl-c to exit)");
@@ -27,7 +27,7 @@ public class WebServer {
         while(true) {
             try {
 
-                // stop and hang execution - lets wait for incoming request
+                // hang execution, and wait for incoming request
                 Socket remote = s.accept();
 
                 // remote client has now establish connection to the server, yay!
@@ -43,19 +43,26 @@ public class WebServer {
                 String str = ".";
                 while (!str.equals("")) {
                     str = in.readLine();
+                    System.out.println(str);
                 }
 
                 /*
                 *  Hmm, maybe this is a good spot for returning some content to
                 *  the client now?
-                *  Maybe via the "out" PrintWrite object ... but i don't know.
+                *  Maybe via the "out" PrintWrite object ... but i dont know.
                 */
-
+                out.println("HTTP/1.0 200 OK");
+                out.println("Content-Type: application/json");
+                out.println("Server: java");
+                out.println("");
+                out.println("{\"success\":\"true\"}");
 
                 /*
                 *  Should we do something when the response has been sent?
-                *  ... like closing something?
+                *  Like
                 */
+                out.flush();
+                remote.close();
 
 
 
